@@ -1,119 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PeerConnect - Browse</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
-  <style>
-    .gradient-bg {
-      background: linear-gradient(to right, #14b8a6, #f97316);
-    }
-    [data-theme="dark"] {
-      --bg-color: #1f2937;
-      --text-color: #f3f4f6;
-      --card-bg: #374151;
-      --border-color: #4b5563;
-    }
-    body {
-      background-color: var(--bg-color, #f3f4f6);
-      color: var(--text-color, #1f2937);
-    }
-    .focus-outline:focus {
-      outline: 2px solid #14b8a6;
-      outline-offset: 2px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerConnect - Browse Users</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen flex flex-col">
-  <nav class="bg-white dark:bg-gray-900 shadow-md p-4 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-      <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white">PeerConnect</a>
-      <div class="flex flex-wrap space-x-4 mt-2 sm:mt-0">
-        <a href="browse.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Browse</a>
-        <a href="connections.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Connections</a>
-        <a href="messages.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Messages</a>
-        <a href="profile.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Profile</a>
-        <a href="projects.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Projects</a>
-        <button id="theme-toggle" class="focus-outline p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle theme">
-          <i data-feather="moon" class="w-5 h-5"></i>
-        </button>
-        <button id="logout-btn" class="focus-outline px-4 py-2 gradient-bg text-white rounded-lg hover:scale-105 transition-transform">Logout</button>
-      </div>
+<body>
+    <div class="container">
+        <header>
+            <h1>PeerConnect</h1>
+            <nav>
+                <ul>
+                    <li><a href="browse.html" class="active">Browse</a></li>
+                    <li><a href="messages.html">Messages</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" id="logout-btn">Logout</a></li>
+                    <li class="theme-toggle">
+                        <span class="theme-toggle-icon" id="theme-toggle">🌓</span>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <h2>Browse Users</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by username or department...">
+                <button id="search-btn" class="btn">Search</button>
+            </div>
+            
+            <div id="users-container" class="users-grid">
+                <!-- Users will be dynamically populated here -->
+            </div>
+        </main>
     </div>
-  </nav>
-
-  <main class="flex-grow max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-    <!-- Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 text-center">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Connections</h3>
-        <p id="connections-count" class="text-3xl font-bold text-teal-500 dark:text-teal-400 mt-2">0</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 text-center">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Profile Views</h3>
-        <p id="profile-views" class="text-3xl font-bold text-teal-500 dark:text-teal-400 mt-2">0</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 text-center">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Skill Matches</h3>
-        <p id="skill-matches" class="text-3xl font-bold text-teal-500 dark:text-teal-400 mt-2">0</p>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-8">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Find Peers</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <input id="search-input" type="text" class="focus-outline px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white placeholder-gray-400" placeholder="Search by name, skills, or interests">
-        <select id="department-filter" class="focus-outline px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white">
-          <option value="">All Departments</option>
-          <option value="Computer Science">Computer Science</option>
-          <option value="Design">Design</option>
-          <option value="Engineering">Engineering</option>
-        </select>
-        <select id="year-filter" class="focus-outline px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white">
-          <option value="">All Years</option>
-          <option value="Freshman">Freshman</option>
-          <option value="Sophomore">Sophomore</option>
-          <option value="Junior">Junior</option>
-          <option value="Senior">Senior</option>
-        </select>
-        <button id="clear-filters" class="focus-outline px-4 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:scale-105 transition-transform">Clear Filters</button>
-      </div>
-      <div id="filter-pills" class="flex flex-wrap gap-2 mt-4"></div>
-      <button id="clear-filters-mobile" class="sm:hidden mt-4 w-full focus-outline px-4 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg font-medium hover:scale-105 transition-transform">Clear Filters</button>
-    </div>
-
-    <!-- Students Grid -->
-    <div id="loading-state" class="hidden"></div>
-    <div id="empty-state" class="hidden"></div>
-    <div id="student-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </main>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="hidden fixed bottom-4 right-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 max-w-sm opacity-0">
-    <div class="flex items-start">
-      <div class="flex-1">
-        <p id="toast-title" class="font-semibold text-gray-900 dark:text-white"></p>
-        <p id="toast-message" class="text-sm text-gray-600 dark:text-gray-300 mt-1"></p>
-      </div>
-      <button id="close-toast" class="ml-4 focus-outline p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-        <i data-feather="x" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
-      </button>
-    </div>
-  </div>
-  <script src="js/auth.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/browse.js"></script>
-  <script>
-    feather.replace();
-
-    // Close toast
-    document.getElementById('close-toast').addEventListener('click', () => {
-      const toast = document.getElementById('toast');
-      toast.classList.add('hidden');
-    });
-  </script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
