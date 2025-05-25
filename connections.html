@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PeerConnect - Connections</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(to right, #14b8a6, #f97316);
+    }
+    [data-theme="dark"] {
+      --bg-color: #1f2937;
+      --text-color: #f3f4f6;
+      --card-bg: #374151;
+      --border-color: #4b5563;
+    }
+    body {
+      background-color: var(--bg-color, #f3f4f6);
+      color: var(--text-color, #1f2937);
+    }
+    .focus-outline:focus {
+      outline: 2px solid #14b8a6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-white dark:bg-gray-900 shadow-md p-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+      <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white">PeerConnect</a>
+      <div class="flex flex-wrap space-x-4 mt-2 sm:mt-0">
+        <a href="browse.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Browse</a>
+        <a href="connections.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Connections</a>
+        <a href="messages.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Messages</a>
+        <a href="profile.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Profile</a>
+        <a href="projects.html" class="text-gray-600 dark:text-gray-300 hover:text-teal-500 transition-colors">Projects</a>
+        <button id="theme-toggle" class="focus-outline p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle theme">
+          <i data-feather="moon" class="w-5 h-5"></i>
+        </button>
+        <button id="logout-btn" class="focus-outline px-4 py-2 gradient-bg text-white rounded-lg hover:scale-105 transition-transform">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Your Connections</h1>
+    <div id="empty-connections" class="hidden"></div>
+    <div id="connections-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-4 right-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 max-w-sm opacity-0">
+    <div class="flex items-start">
+      <div class="flex-1">
+        <p id="toast-title" class="font-semibold text-gray-900 dark:text-white"></p>
+        <p id="toast-message" class="text-sm text-gray-600 dark:text-gray-300 mt-1"></p>
+      </div>
+      <button id="close-toast" class="ml-4 focus-outline p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+        <i data-feather="x" class="w-4 h-4 text-gray-500 dark:text-gray-400"></i>
+      </button>
+    </div>
+  </div>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/connections.js"></script>
+  <script>
+    feather.replace();
+
+    // Close toast
+    document.getElementById('close-toast').addEventListener('click', () => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
